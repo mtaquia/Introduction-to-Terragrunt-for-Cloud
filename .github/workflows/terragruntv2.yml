@@ -1,4 +1,6 @@
 name: 'Terragrunt GitHub Actions'
+permissions:
+  id-token: write
 on:
   - pull_request
 
