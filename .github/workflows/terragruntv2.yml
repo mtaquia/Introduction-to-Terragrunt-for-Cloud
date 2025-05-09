@@ -7,7 +7,7 @@ on:
 env:
   tofu_version: '1.8.1'
   tg_version: '0.67.0'
-  working_dir: 'project'
+  working_dir: './environments/dev'
 
 jobs:
   checks:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@main
-      - name: assume role
+      - name: assume AWS role
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-skip-session-tagging: true
