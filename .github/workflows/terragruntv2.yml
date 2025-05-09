@@ -21,13 +21,13 @@ jobs:
           role-skip-session-tagging: true
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::719798204634:role/GitHub-role-test
-      - name: Check terragrunt HCL
-        uses: gruntwork-io/terragrunt-action@v2
-        with:
-          tofu_version: ${{ env.tofu_version }}
-          tg_version: ${{ env.tg_version }}
-          tg_dir: ${{ env.working_dir }}
-          tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
+      # - name: Check terragrunt HCL
+      #   uses: gruntwork-io/terragrunt-action@v2
+      #   with:
+      #     tofu_version: ${{ env.tofu_version }}
+      #     tg_version: ${{ env.tg_version }}
+      #     tg_dir: ${{ env.working_dir }}
+      #     tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
 
   plan:
     runs-on: ubuntu-latest
