@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
+      - name: assume role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-skip-session-tagging: true
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::719798204634:role/GitHub-role-test
+      - run: aws sts get-caller-identity
       - name: 'Terragrunt Format'
         uses: the-commons-project/terragrunt-github-actions@master
         with:
