@@ -64,7 +64,7 @@ jobs:
           tg_command: 'plan'
           tg_comment: 1
       - name: List files
-        run: tree
+        run: tree -a
 
   deploy:
     runs-on: ubuntu-latest
