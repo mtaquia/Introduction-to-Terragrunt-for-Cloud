@@ -1,13 +1,13 @@
-name: 'Terragrunt GitHub Actions'
+name: 'Terragrunt_dev GitHub Actions'
 on:
   - pull_request
 env:
   tf_version: 'latest'
   tg_version: 'latest'
-  tf_working_dir: '.'
+  tf_working_dir: './environments/dev'
 jobs:
   terragrunt:
-    name: 'Terragrunt'
+    name: 'Terragrunt_dev'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
