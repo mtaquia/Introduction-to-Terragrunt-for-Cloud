@@ -1,5 +1,6 @@
 provider "aws" {
-  region = "us-east-1"
+  region  = "us-east-1"
+  profile = "personal" # by Michael
 }
 
 resource "aws_instance" "terragrunt_instance" {
