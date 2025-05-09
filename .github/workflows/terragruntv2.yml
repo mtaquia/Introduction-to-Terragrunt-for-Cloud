@@ -28,6 +28,8 @@ jobs:
           role-to-assume: arn:aws:iam::719798204634:role/GitHub-role-test
       - name: Plan
         uses: gruntwork-io/terragrunt-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
