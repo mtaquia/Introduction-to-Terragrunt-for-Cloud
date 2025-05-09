@@ -17,7 +17,7 @@ env:
   tf_version: '1.11.3'
   tg_version: '0.67.0'
   working_dir: './environments/dev'
-  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
+  #TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
 
 jobs:
   validate_plan:
@@ -31,8 +31,8 @@ jobs:
           role-skip-session-tagging: true
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::719798204634:role/GitHub-role-test
-      - name: Create Terraform Plugin Cache Dir
-        run: mkdir -p $TF_PLUGIN_CACHE_DIR
+      # - name: Create Terraform Plugin Cache Dir
+      #   run: mkdir -p $TF_PLUGIN_CACHE_DIR
       
       # - name: Terraform Plugin Cache
       #   uses: actions/cache@v4
