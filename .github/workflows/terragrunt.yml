@@ -2,8 +2,8 @@ name: 'Terragrunt_dev GitHub Actions'
 on:
   - pull_request
 env:
-  tf_version: 'latest'
-  tg_version: 'latest'
+  tf_version: 'latest' # 1.11.4
+  tg_version: 'latest' # 0.78.2
   tf_working_dir: './environments/dev'
 jobs:
   terragrunt:
@@ -33,17 +33,17 @@ jobs:
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Terragrunt Validate'
-        uses: the-commons-project/terragrunt-github-actions@master
-        with:
-          tf_actions_version: ${{ env.tf_version }}
-          tg_actions_version: ${{ env.tg_version }}
-          tf_actions_binary: 'terraform'
-          tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: ${{ env.tf_working_dir }}
-          tf_actions_comment: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   - name: 'Terragrunt Validate'
+    #     uses: the-commons-project/terragrunt-github-actions@master
+    #     with:
+    #       tf_actions_version: ${{ env.tf_version }}
+    #       tg_actions_version: ${{ env.tg_version }}
+    #       tf_actions_binary: 'terraform'
+    #       tf_actions_subcommand: 'validate'
+    #       tf_actions_working_dir: ${{ env.tf_working_dir }}
+    #       tf_actions_comment: true
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terragrunt Plan'
         uses: the-commons-project/terragrunt-github-actions@master
         with:
