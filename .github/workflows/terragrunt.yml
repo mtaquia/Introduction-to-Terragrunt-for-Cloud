@@ -1,4 +1,8 @@
 name: 'Terragrunt_dev GitHub Actions'
+permissions:
+    id-token: write # allow GitHub's OIDC provider to create a JSON Web Token for every run.
+    # You won't be able to request the OIDC JWT ID token if the permissions for id-token is not set to write
+    contents: read # This is required for actions/checkout
 on:
   - pull_request
 env:
