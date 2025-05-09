@@ -63,6 +63,8 @@ jobs:
           tg_dir: ${{ env.working_dir }}
           tg_command: 'plan'
           tg_comment: 1
+      - name: List files
+        run: tree
 
   deploy:
     runs-on: ubuntu-latest
