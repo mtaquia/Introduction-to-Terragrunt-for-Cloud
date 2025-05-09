@@ -1,3 +1,6 @@
+# https://github.com/gruntwork-io/terragrunt-action
+#https://github.com/autero1/action-terragrunt
+# https://dev.to/aws-builders/provision-eks-cluster-with-terraform-terragrunt-github-actions-1c64
 name: 'Terragrunt GitHub Actions'
 permissions:
   id-token: write
@@ -56,9 +59,11 @@ jobs:
 
       - name: Deploy
         uses: gruntwork-io/terragrunt-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_dir }}
           tg_command: 'apply'
-          #tg_comment: 1
+          tg_comment: 1
