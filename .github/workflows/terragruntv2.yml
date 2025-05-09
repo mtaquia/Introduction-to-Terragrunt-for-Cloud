@@ -5,6 +5,7 @@ on:
   - pull_request
 
 env:
+  tf_version: '1.11.3'
   tofu_version: '1.8.1'
   tg_version: '0.67.0'
   working_dir: './environments/dev'
@@ -44,10 +45,11 @@ jobs:
       - name: Plan
         uses: gruntwork-io/terragrunt-action@v2
         with:
-          tofu_version: ${{ env.tofu_version }}
+          tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_dir }}
           tg_command: 'plan'
+          tg_comment: 1
 
   # deploy:
   #   runs-on: ubuntu-latest
