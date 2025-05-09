@@ -34,18 +34,18 @@ jobs:
       - name: Create Terraform Plugin Cache Dir
         run: mkdir -p $TF_PLUGIN_CACHE_DIR
       
-      - name: Terraform Plugin Cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('${{ env.working_dir }}/.terraform.lock.hcl') }}
-          # key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
+      # - name: Terraform Plugin Cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+      #     key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('${{ env.working_dir }}/.terraform.lock.hcl') }}
+      #     # key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
 
       - name: Validate
         uses: gruntwork-io/terragrunt-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
+          #TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
         with:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
@@ -57,15 +57,14 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
+          #TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
         with:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_dir }}
           tg_command: 'plan'
           tg_comment: 1
-      - name: List files
-        run: tree -a
+
 
   deploy:
     runs-on: ubuntu-latest
