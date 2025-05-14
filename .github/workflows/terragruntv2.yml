@@ -8,18 +8,19 @@ permissions:
 on:
   push:
     branches:
-      - stage_branch
+      - unicorn_branch
   pull_request:
     branches:
-      - stage_branch
+      - unicorn_branch
 
 env:
   tf_version: '1.11.3'
   tg_version: '0.67.0'
   working_dir: './environments/dev'
+  #TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
 
 jobs:
-  plan:
+  validate_plan:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
@@ -30,10 +31,33 @@ jobs:
           role-skip-session-tagging: true
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::719798204634:role/GitHub-role-test
+      # - name: Create Terraform Plugin Cache Dir
+      #   run: mkdir -p $TF_PLUGIN_CACHE_DIR
+      
+      # - name: Terraform Plugin Cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+      #     key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('${{ env.working_dir }}/.terraform.lock.hcl') }}
+      #     # key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
+
+      - name: Validate
+        uses: gruntwork-io/terragrunt-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
+        with:
+          tf_version: ${{ env.tf_version }}
+          tg_version: ${{ env.tg_version }}
+          tg_dir: ${{ env.working_dir }}
+          tg_command: 'validate'
+          tg_comment: 1
+
       - name: Plan
         uses: gruntwork-io/terragrunt-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
         with:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
@@ -41,9 +65,10 @@ jobs:
           tg_command: 'plan'
           tg_comment: 1
 
+
   deploy:
     runs-on: ubuntu-latest
-    needs: [ plan ]
+    needs: [ validate_plan ]
     #environment: 'prod'
     #if: github.event.pull_request.base.ref == 'stage_branch'
     if: github.event_name == 'push'
@@ -66,4 +91,3 @@ jobs:
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_dir }}
           tg_command: 'apply'
-          tg_comment: 1
