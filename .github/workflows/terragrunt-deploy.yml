@@ -40,7 +40,7 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ matrix.region }}
-          role-session-name: GitHubActionsTerragrunt
+          #role-session-name: GitHubActionsTerragrunt
           role-skip-session-tagging: true
 
       - name: Cache Terraform Plugins
