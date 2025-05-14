@@ -8,10 +8,10 @@ permissions:
 on:
   push:
     branches:
-      - stage_branch
+      - unicorn_branch
   pull_request:
     branches:
-      - stage_branch
+      - unicorn_branch
 
 env:
   tf_version: '1.11.3'

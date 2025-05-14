@@ -1,0 +1,89 @@
+name: Terragrunt Deploy
+
+permissions:
+  id-token: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - stage_branch
+  pull_request:
+    branches:
+      - stage_branch
+
+env:
+  TF_VERSION: '1.11.3'
+  TG_VERSION: '0.67.0'
+  TG_PARALLELISM: '2'
+
+concurrency:
+  group: terragrunt-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  terragrunt:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        account: [cuenta1]
+        #account: [cuenta1, cuenta2]
+        region: [us-east-1, us-west-2]
+      fail-fast: false
+    environment: ${{ matrix.account }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ matrix.region }}
+          role-session-name: GitHubActionsTerragrunt
+          role-skip-session-tagging: true
+
+      - name: Cache Terraform Plugins
+        uses: actions/cache@v4
+        with:
+          path: ~/.terraform.d/plugin-cache
+          key: terraform-${{ matrix.account }}-${{ matrix.region }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+          restore-keys: terraform-${{ matrix.account }}-${{ matrix.region }}-
+
+      - name: Terragrunt Validate
+        uses: gruntwork-io/terragrunt-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
+        with:
+          tf_version: ${{ env.TF_VERSION }}
+          tg_version: ${{ env.TG_VERSION }}
+          tg_dir: live-infrastructure/${{ matrix.account }}/${{ matrix.region }}
+          tg_command: run-all validate
+          tg_comment: 1
+
+      - name: Terragrunt Plan
+        uses: gruntwork-io/terragrunt-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
+        with:
+          tf_version: ${{ env.TF_VERSION }}
+          tg_version: ${{ env.TG_VERSION }}
+          tg_dir: live-infrastructure/${{ matrix.account }}/${{ matrix.region }}
+          tg_command: run-all plan
+          tg_args: --terragrunt-parallelism ${{ env.TG_PARALLELISM }}
+          tg_comment: 1
+
+      - name: Terragrunt Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/stage_branch'
+        uses: gruntwork-io/terragrunt-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
+        with:
+          tf_version: ${{ env.TF_VERSION }}
+          tg_version: ${{ env.TG_VERSION }}
+          tg_dir: live-infrastructure/${{ matrix.account }}/${{ matrix.region }}
+          tg_command: run-all apply
+          tg_args: --terragrunt-non-interactive --terragrunt-parallelism ${{ env.TG_PARALLELISM }}
