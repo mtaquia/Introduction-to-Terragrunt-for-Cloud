@@ -8,7 +8,7 @@ locals {
     
     account_name = local.account_vars.locals.account_name
     account_id   = local.account_vars.locals.aws_account_id
-    aws_profile  = local.account_vars.locals.aws_profile
+    #aws_profile  = local.account_vars.locals.aws_profile
     aws_region   = local.region_vars.locals.aws_region 
 }
 
@@ -19,7 +19,6 @@ generate "provider" {
     contents = <<EOF
 provider "aws" {
     region = "${local.aws_region}"
-    profile = "${local.aws_profile}"
 }
 EOF    
 }
@@ -36,7 +35,7 @@ remote_state {
         region = local.aws_region
         encrypt = true
         use_lockfile = true
-        profile = local.aws_profile
+        #profile = local.aws_profile
         #dynamodb_table = "mtaquia-dynamo-lock-table"
         #profile = "personal" # Ensure S3 backend and DynamoDB use personal profile
     }
