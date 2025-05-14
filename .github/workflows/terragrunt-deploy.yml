@@ -26,8 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        account: [cuenta1]
-        #account: [cuenta1, cuenta2]
+        account: [cuenta1, cuenta2]
         region: [us-east-1, us-west-2]
       fail-fast: false
     environment: ${{ matrix.account }}
@@ -40,7 +39,6 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ matrix.region }}
-          #role-session-name: GitHubActionsTerragrunt
           role-skip-session-tagging: true
 
       - name: Cache Terraform Plugins
