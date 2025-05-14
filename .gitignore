@@ -6,7 +6,7 @@
 *.tfstate.*
 
 # terragrunt files
-**/.terragrunt-cache/**
+
 
 # kubeconfig
 kubeconfig
