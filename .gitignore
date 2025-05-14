@@ -27,7 +27,7 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 **/.terraform.lock.hcl
-
+.terraform.lock.hcl
 # Compressed files
 *.zip
 *.tar.gz
